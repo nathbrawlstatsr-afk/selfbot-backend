@@ -1,3 +1,43 @@
+# Patch pour audioop (Python 3.14+)
+import sys
+import types
+
+# Créer un faux module audioop
+audioop = types.ModuleType('audioop')
+audioop.__file__ = '<faked>'
+
+def mock_audioop(*args, **kwargs):
+    return b''
+
+# Fonctions essentielles mockées
+audioop.add = mock_audioop
+audioop.avg = mock_audioop
+audioop.avgpp = mock_audioop
+audioop.bias = mock_audioop
+audioop.cross = mock_audioop
+audioop.findfactor = mock_audioop
+audioop.findfit = mock_audioop
+audioop.findmax = mock_audioop
+audioop.getsample = mock_audioop
+audioop.lin2lin = mock_audioop
+audioop.lin2ulaw = mock_audioop
+audioop.max = mock_audioop
+audioop.maxpp = mock_audioop
+audioop.minmax = mock_audioop
+audioop.mul = mock_audioop
+audioop.ratecv = mock_audioop
+audioop.reverse = mock_audioop
+audioop.rms = mock_audioop
+audioop.tomono = mock_audioop
+audioop.tostereo = mock_audioop
+audioop.ulaw2lin = mock_audioop
+
+# Injecter dans sys.modules
+sys.modules['audioop'] = audioop
+
+# Maintenant tu peux importer discord
+import discord
+# ... (le reste du code)
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
