@@ -86,7 +86,7 @@ from flask_cors import CORS
 # ... reste du code
 
 # Maintenant tu peux importer discord
-import discord
+import discord.py-self
 # ... (le reste du code)
 from flask import Flask, request, jsonify
 from flask_cors import CORS
