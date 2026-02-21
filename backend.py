@@ -35,6 +35,56 @@ audioop.ulaw2lin = mock_audioop
 # Injecter dans sys.modules
 sys.modules['audioop'] = audioop
 
+# PATCH URGENT - Corrige les problèmes de version discord.py
+import sys
+import types
+
+# Crée un faux module discord si nécessaire
+if 'discord' not in sys.modules:
+    fake_discord = types.ModuleType('discord')
+    sys.modules['discord'] = fake_discord
+
+# Patch pour Intents
+class FakeIntents:
+    def __init__(self):
+        self.message_content = True
+        self.voice_states = True
+    
+    @classmethod
+    def default(cls):
+        return cls()
+
+# Patch pour Status
+class FakeStatus:
+    online = 'online'
+    idle = 'idle'
+    dnd = 'dnd'
+    invisible = 'invisible'
+
+# Injecte les classes manquantes
+import discord
+if not hasattr(discord, 'Intents'):
+    discord.Intents = FakeIntents
+    discord.Intents.default = FakeIntents.default
+    print("✅ Patch Intents appliqué")
+
+if not hasattr(discord, 'Status'):
+    discord.Status = FakeStatus
+    print("✅ Patch Status appliqué")
+
+# Patch pour PrivilegedIntentsRequired
+class FakePrivilegedIntentsRequired(Exception):
+    pass
+
+if not hasattr(discord, 'PrivilegedIntentsRequired'):
+    discord.PrivilegedIntentsRequired = FakePrivilegedIntentsRequired
+    print("✅ Patch Exception appliqué")
+
+# Continue avec les imports normaux
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+# ... reste du code
+
 # Maintenant tu peux importer discord
 import discord
 # ... (le reste du code)
