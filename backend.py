@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-// ============================================
-// SCRIPT AUTO-INSTALL ET CONFIGURATION
-// ============================================
+
 
 import { execSync } from 'child_process';
 import fs from 'fs';
@@ -21,9 +19,7 @@ const rl = createInterface({
 
 const question = (query) => new Promise((resolve) => rl.question(query, resolve));
 
-// ============================================
-// FONCTIONS D'INSTALLATION
-// ============================================
+
 
 async function checkNodeVersion() {
     const version = process.version;
@@ -121,9 +117,7 @@ async function setupConfig() {
     return config;
 }
 
-// ============================================
-// FONCTIONS DE TEST
-// ============================================
+
 
 async function testConnection(config) {
     console.log('\n🔍 Test de connexion...');
@@ -276,9 +270,7 @@ async function main() {
         }, 5000);
     });
     
-    // ============================================
-    // FONCTIONS UTILS
-    // ============================================
+
     
     async function joinVC(client, config) {
         try {
