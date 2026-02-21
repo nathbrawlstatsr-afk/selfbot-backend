@@ -1,3 +1,4 @@
+# backend.py (version allégée sans dépendances audio)
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
@@ -10,6 +11,12 @@ from discord.ext import commands
 import time
 import sys
 
+# Patch pour éviter audioop
+import sys
+sys.modules['audioop'] = type('Mock', (), {'__file__': None})()
+import builtins
+builtins.audioop = sys.modules['audioop']
+
 app = Flask(__name__)
 CORS(app)
 
@@ -18,7 +25,7 @@ def log(msg, level="INFO"):
     print(f"[{timestamp}] [{level}] {msg}")
     sys.stdout.flush()
 
-log("🚀 Démarrage du SelfBot Backend sur Render", "INFO")
+log("🚀 Démarrage du SelfBot Backend", "INFO")
 
 # Base de données
 def init_db():
@@ -126,7 +133,7 @@ def start_existing_bots():
 
 @app.route('/')
 def home():
-    return jsonify({"status": "online", "message": "SelfBot API on Render"})
+    return jsonify({"status": "online", "message": "SelfBot API"})
 
 @app.route('/api/tokens', methods=['GET'])
 def get_tokens():
@@ -171,7 +178,6 @@ def join_voice(token_id):
     return jsonify({'success': success, 'message': msg})
 
 if __name__ == '__main__':
-    # Démarrer les bots après le serveur
     threading.Thread(target=lambda: [time.sleep(3), start_existing_bots()], daemon=True).start()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
